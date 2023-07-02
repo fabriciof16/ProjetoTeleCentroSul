@@ -1,0 +1,144 @@
+PLTCE-A01#show running-config
+Building configuration...
+
+Current configuration : 1518 bytes
+!
+! Last configuration change at 01:11:27 EET Fri Jun 30 2023
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname PLTCE-A01
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.32.64.9 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 10.32.65.146 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf cost 5
+ duplex auto
+!
+interface Ethernet0/1
+ ip address 10.32.64.142 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf cost 10
+ duplex auto
+!
+interface Ethernet0/2
+ ip address 10.32.70.1 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+ duplex auto
+!
+router ospf 1
+ router-id 10.32.64.9
+ redistribute connected subnets
+ redistribute static subnets
+ network 10.32.64.9 0.0.0.0 area 0
+ network 10.32.64.140 0.0.0.3 area 0
+ network 10.32.65.144 0.0.0.3 area 0
+!
+ip forward-protocol nd
+!
+!
+ip http server
+no ip http secure-server
+ip route 10.32.70.128 255.255.255.128 Null0
+ip route 10.32.104.0 255.255.248.0 Null0
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
+PLTCE-A01#

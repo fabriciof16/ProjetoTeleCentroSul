@@ -1,0 +1,385 @@
+CSLCE-CPE01#show run
+Building configuration...
+
+Current configuration : 10200 bytes
+!
+! Last configuration change at 04:17:37 EET Fri Jun 30 2023
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname CSLCE-CPE01
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+ip dhcp excluded-address 172.16.11.1
+ip dhcp excluded-address 172.16.12.1
+ip dhcp excluded-address 172.16.13.1
+ip dhcp excluded-address 172.16.14.1
+ip dhcp excluded-address 172.16.15.1
+ip dhcp excluded-address 172.16.16.1
+ip dhcp excluded-address 172.16.17.1
+ip dhcp excluded-address 172.16.18.1
+ip dhcp excluded-address 172.16.19.1
+!
+ip dhcp pool poolti
+ network 172.16.11.0 255.255.255.224
+ default-router 172.16.11.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool vendas
+ network 172.16.12.0 255.255.255.128
+ default-router 172.16.12.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool poolmarkting
+ network 172.16.13.0 255.255.255.240
+ default-router 172.16.13.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool pooltjuridico
+ network 172.16.14.0 255.255.255.240
+ default-router 172.16.14.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool poolfinanceiro
+ network 172.16.15.0 255.255.255.240
+ default-router 172.16.15.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool poolrh
+ network 172.16.16.0 255.255.255.240
+ default-router 172.16.16.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool poolgerreds
+ network 172.16.17.0 255.255.255.252
+ default-router 172.16.17.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool poolfproj
+ network 172.16.18.0 255.255.255.224
+ default-router 172.16.18.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool pooloperemanut
+ network 172.16.19.0 255.255.255.192
+ default-router 172.16.19.1
+ dns-server 8.8.8.8
+!
+!
+!
+ip cef
+ipv6 source-route
+no ipv6 cef
+ipv6 dhcp pool dhcp-poolti
+ address prefix FCAD:0:4FD:A::/64
+ dns-server 2001:DB8:3000:3000::42
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Tunnel100
+ ip address 192.168.100.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf cost 500
+ tunnel source 10.32.69.2
+ tunnel destination 10.32.66.2
+!
+interface Tunnel101
+ ip address 192.168.101.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf cost 600
+ tunnel source 10.32.69.2
+ tunnel destination 10.32.67.2
+!
+interface Ethernet0/0
+ ip address 10.32.69.2 255.255.255.252
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+!
+interface Ethernet0/1
+ no ip address
+ duplex auto
+!
+interface Ethernet0/1.10
+ description TI
+ encapsulation dot1Q 10
+ ip address 172.16.11.1 255.255.255.224
+ ip access-group 110 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:A::1/64
+ ipv6 address autoconfig
+ ipv6 enable
+ ipv6 nd other-config-flag
+ ipv6 dhcp server dhcp-poolti
+!
+interface Ethernet0/1.20
+ description Vendas
+ encapsulation dot1Q 20
+ ip address 172.16.12.1 255.255.255.128
+ ip access-group 120 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:B::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.30
+ description Marketing
+ encapsulation dot1Q 30
+ ip address 172.16.13.1 255.255.255.240
+ ip access-group 130 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:C::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.40
+ description JurC-dico
+ encapsulation dot1Q 40
+ ip address 172.16.14.1 255.255.255.240
+ ip access-group 140 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:D::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.50
+ description Financeiro
+ encapsulation dot1Q 50
+ ip address 172.16.15.1 255.255.255.240
+ ip access-group 150 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:E::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.60
+ description RH
+ encapsulation dot1Q 60
+ ip address 172.16.16.1 255.255.255.240
+ ip access-group 160 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:F::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.70
+ description GerRedes
+ encapsulation dot1Q 70
+ ip address 172.16.17.1 255.255.255.252
+ ip access-group 170 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:10::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.80
+ description Projetos
+ encapsulation dot1Q 80
+ ip address 172.16.18.1 255.255.255.224
+ ip access-group 180 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:11::1/64
+ ipv6 enable
+!
+interface Ethernet0/1.90
+ description OperEManut
+ encapsulation dot1Q 90
+ ip address 172.16.19.1 255.255.255.192
+ ip access-group 190 in
+ ip nat inside
+ ip virtual-reassembly in
+ ipv6 address FCAD:0:4FD:12::1/64
+ ipv6 enable
+!
+interface Ethernet0/2
+ no ip address
+ duplex auto
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+ duplex auto
+!
+router ospf 2
+ redistribute connected subnets
+ network 192.168.100.0 0.0.0.3 area 1
+ network 192.168.101.0 0.0.0.3 area 1
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat inside source list 10 interface Ethernet0/0 overload
+ip route 0.0.0.0 0.0.0.0 10.32.69.1 254
+ip route 10.32.66.0 255.255.255.252 10.32.69.1
+ip route 10.32.67.0 255.255.255.252 10.32.69.1
+!
+ipv6 ioam timestamp
+!
+!
+access-list 10 permit 172.16.11.0 0.0.0.31
+access-list 10 permit 172.16.12.0 0.0.0.127
+access-list 10 permit 172.16.13.0 0.0.0.15
+access-list 10 permit 172.16.14.0 0.0.0.15
+access-list 10 permit 172.16.15.0 0.0.0.15
+access-list 10 permit 172.16.16.0 0.0.0.15
+access-list 10 permit 172.16.17.0 0.0.0.3
+access-list 10 permit 172.16.18.0 0.0.0.31
+access-list 10 permit 172.16.19.0 0.0.0.63
+access-list 110 permit udp any eq bootpc any eq bootps
+access-list 110 permit ip 172.16.11.0 0.0.0.255 172.16.1.0 0.0.0.255
+access-list 110 permit ip 172.16.11.0 0.0.0.255 172.16.11.0 0.0.0.255
+access-list 110 permit ip 172.16.11.0 0.0.0.255 172.16.21.0 0.0.0.255
+access-list 110 permit ip 172.16.11.0 0.0.0.255 172.16.31.0 0.0.0.255
+access-list 110 permit ip 172.16.11.0 0.0.0.255 172.16.41.0 0.0.0.255
+access-list 110 deny   ip 172.16.11.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 110 permit ip any any
+access-list 120 permit udp any eq bootpc any eq bootps
+access-list 120 permit ip 172.16.12.0 0.0.0.255 172.16.2.0 0.0.0.255
+access-list 120 permit ip 172.16.12.0 0.0.0.255 172.16.12.0 0.0.0.255
+access-list 120 permit ip 172.16.12.0 0.0.0.255 172.16.22.0 0.0.0.255
+access-list 120 permit ip 172.16.12.0 0.0.0.255 172.16.32.0 0.0.0.255
+access-list 120 permit ip 172.16.12.0 0.0.0.255 172.16.42.0 0.0.0.255
+access-list 120 deny   ip 172.16.12.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 120 permit ip any any
+access-list 130 permit udp any eq bootpc any eq bootps
+access-list 130 permit ip 172.16.13.0 0.0.0.255 172.16.3.0 0.0.0.255
+access-list 130 permit ip 172.16.13.0 0.0.0.255 172.16.13.0 0.0.0.255
+access-list 130 permit ip 172.16.13.0 0.0.0.255 172.16.23.0 0.0.0.255
+access-list 130 permit ip 172.16.13.0 0.0.0.255 172.16.33.0 0.0.0.255
+access-list 130 permit ip 172.16.13.0 0.0.0.255 172.16.43.0 0.0.0.255
+access-list 130 deny   ip 172.16.13.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 130 permit ip any any
+access-list 140 permit udp any eq bootpc any eq bootps
+access-list 140 permit ip 172.16.14.0 0.0.0.255 172.16.4.0 0.0.0.255
+access-list 140 permit ip 172.16.14.0 0.0.0.255 172.16.14.0 0.0.0.255
+access-list 140 permit ip 172.16.14.0 0.0.0.255 172.16.24.0 0.0.0.255
+access-list 140 permit ip 172.16.14.0 0.0.0.255 172.16.34.0 0.0.0.255
+access-list 140 permit ip 172.16.14.0 0.0.0.255 172.16.44.0 0.0.0.255
+access-list 140 deny   ip 172.16.14.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 140 permit ip any any
+access-list 150 permit udp any eq bootpc any eq bootps
+access-list 150 permit ip 172.16.15.0 0.0.0.255 172.16.5.0 0.0.0.255
+access-list 150 permit ip 172.16.15.0 0.0.0.255 172.16.15.0 0.0.0.255
+access-list 150 permit ip 172.16.15.0 0.0.0.255 172.16.25.0 0.0.0.255
+access-list 150 permit ip 172.16.15.0 0.0.0.255 172.16.35.0 0.0.0.255
+access-list 150 permit ip 172.16.15.0 0.0.0.255 172.16.45.0 0.0.0.255
+access-list 150 deny   ip 172.16.15.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 150 permit ip any any
+access-list 160 permit udp any eq bootpc any eq bootps
+access-list 160 permit ip 172.16.16.0 0.0.0.255 172.16.6.0 0.0.0.255
+access-list 160 permit ip 172.16.16.0 0.0.0.255 172.16.16.0 0.0.0.255
+access-list 160 permit ip 172.16.16.0 0.0.0.255 172.16.26.0 0.0.0.255
+access-list 160 permit ip 172.16.16.0 0.0.0.255 172.16.36.0 0.0.0.255
+access-list 160 deny   ip 172.16.16.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 160 permit ip any any
+access-list 170 permit udp any eq bootpc any eq bootps
+access-list 170 permit ip 172.16.17.0 0.0.0.255 172.16.7.0 0.0.0.255
+access-list 170 permit ip 172.16.17.0 0.0.0.255 172.16.17.0 0.0.0.255
+access-list 170 permit ip 172.16.17.0 0.0.0.255 172.16.27.0 0.0.0.255
+access-list 170 permit ip 172.16.17.0 0.0.0.255 172.16.37.0 0.0.0.255
+access-list 170 permit ip 172.16.17.0 0.0.0.255 172.16.47.0 0.0.0.255
+access-list 170 deny   ip 172.16.17.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 170 permit ip any any
+access-list 180 permit udp any eq bootpc any eq bootps
+access-list 180 permit ip 172.16.18.0 0.0.0.255 172.16.8.0 0.0.0.255
+access-list 180 permit ip 172.16.18.0 0.0.0.255 172.16.18.0 0.0.0.255
+access-list 180 permit ip 172.16.18.0 0.0.0.255 172.16.28.0 0.0.0.255
+access-list 180 permit ip 172.16.18.0 0.0.0.255 172.16.38.0 0.0.0.255
+access-list 180 permit ip 172.16.18.0 0.0.0.255 172.16.48.0 0.0.0.255
+access-list 180 deny   ip 172.16.18.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 180 permit ip any any
+access-list 190 permit udp any eq bootpc any eq bootps
+access-list 190 permit ip 172.16.19.0 0.0.0.255 172.16.9.0 0.0.0.255
+access-list 190 permit ip 172.16.19.0 0.0.0.255 172.16.19.0 0.0.0.255
+access-list 190 permit ip 172.16.19.0 0.0.0.255 172.16.29.0 0.0.0.255
+access-list 190 permit ip 172.16.19.0 0.0.0.255 172.16.39.0 0.0.0.255
+access-list 190 permit ip 172.16.19.0 0.0.0.255 172.16.49.0 0.0.0.255
+access-list 190 deny   ip 172.16.19.0 0.0.0.255 172.16.0.0 0.0.255.255
+access-list 190 permit ip any any
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ privilege level 15
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
+CSLCE-CPE01#

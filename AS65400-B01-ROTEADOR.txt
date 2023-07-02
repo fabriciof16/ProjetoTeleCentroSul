@@ -1,0 +1,143 @@
+AS65400-B01#show run
+Building configuration...
+
+Current configuration : 1548 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname AS65400-B01
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+clock timezone EET 2 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 10.30.1.1 255.255.255.255
+!
+interface Ethernet0/0
+ ip address 192.168.15.2 255.255.255.0
+ duplex auto
+!
+interface Ethernet0/1
+ ip address 10.30.0.9 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/2
+ ip address 10.30.0.5 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+ duplex auto
+!
+router bgp 65400
+ bgp router-id 10.30.1.1
+ bgp log-neighbor-changes
+ network 10.30.0.0 mask 255.255.224.0
+ neighbor 10.30.0.6 remote-as 65500
+ neighbor 10.30.0.6 default-originate
+ neighbor 10.30.0.10 remote-as 65500
+ neighbor 10.30.0.10 default-originate
+!
+ip forward-protocol nd
+!
+!
+ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 192.168.15.1
+ip route 10.30.0.0 255.255.224.0 Null0
+!
+ipv6 ioam timestamp
+!
+snmp-server community telecentrosul RO
+snmp-server host 192.168.15.235 version 2c public
+!
+access-list 5 permit 10.30.0.0 0.0.31.255
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ privilege level 15
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
+
+AS65400-B01#
